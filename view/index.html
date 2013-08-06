@@ -11,11 +11,50 @@
 <body>
 
     <div id="mocha"></div>
+	<script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+	<script src="socket.io/socket.io.js"></script>
+	<script>
+		var $li;
+		var socket = io.connect('http://localhost');
+		socket.emit('getfiles');	  
+		socket.on('retrivefiles', function (data) {
+			$(data).each(function() {
+				$('#files')
+				.append('<button>info</button>')
+				.append(
+				$('<li>'+this.split('/')[this.split('/').length -1]+'<ul></ul></li>')
+				.data('file', this));
+			});
+		});
 
-    <script src="mocha.js"></script>
-    <script>mocha.setup('{{ui}}')</script>
-    <script src="list_test.js"></script>
-    <script>mocha.run()</script>
+		socket.on('info', function (data) {
+			$("ul", $li).append('<li>'+data+'</li>');
+		});
+
+		$(document).on('click', '#files button', function(){
+			$li = $(this).next();
+			$('#spec').html('');
+			$('#info').html('');
+			socket.emit('info', $(this).next().data('file'));
+		})
+
+		$(document).on('click', '#files li', function(){
+			$('#spec').html('');
+			$('#info').html('');
+			console.log('message');
+			socket.emit('run', $(this).data('file'));
+		})
+	  
+		socket.on('spec', function (data) {
+			console.log(data);
+			$('#spec').append(data+'<br>');
+		});	  
+
+	</script>    
+
+	<ul id='files'></ul>
+	<div id='spec'></div>
+	<div id='info'></div>
 
 </body>
 </html>
