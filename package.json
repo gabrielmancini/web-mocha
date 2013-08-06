@@ -6,8 +6,25 @@
   "scripts": {
     "test": "npm test"
   },
-  "repository": "",
-  "keywords": [
+  "author": {
+    "name": "Gabriel Mancini",
+    "email": "gabriel.mancini@gmail.com"
+  },
+  "contributors": [
+    {
+      "name": "Gabriel Mancini",
+      "email": "gabriel.mancini@gmail.com"
+    },
+    {
+      "name": "Joao Neto",
+      "email": "joaopintoneto@gmail.com"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gabrielmancini/web-mocha.git"
+  },
+    "keywords": [
     "mocha",
     "web",
     "server"
