@@ -1,8 +1,8 @@
 {
-  "name": "mocha-run-server",
+  "name": "web-mocha",
   "version": "0.0.0",
   "description": "A mocha http server",
-  "main": "./lib/mocha-run-server.js",
+  "main": "./lib/web-mocha.js",
   "scripts": {
     "test": "npm test"
   },
@@ -26,6 +26,6 @@
     "underscore": "~1.5.1"
   },
   "bin": {
-    "mocha-run-server": "./bin/mocha-run-server"
+    "web-mocha": "./bin/web-mocha"
   }
 }
