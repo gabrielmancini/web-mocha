@@ -5,14 +5,16 @@
     <meta charset="utf-8"/>
     <title>{{title}}</title>
 
-    <link rel="stylesheet" href="mocha.css"/>
-
-</head>
-<body>
-
-    <div id="mocha"></div>
 	<script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
 	<script src="socket.io/socket.io.js"></script>
+
+<link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet">
+<!-- Latest compiled and minified CSS -->
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0-rc1/css/bootstrap.min.css" rel="stylesheet">
+ 
+<!-- Latest compiled and minified JavaScript -->
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0-rc1/js/bootstrap.min.js"></script>
+
 	<script>
 		var $li;
 		var socket = io.connect('http://localhost');
@@ -20,10 +22,15 @@
 		socket.on('retrivefiles', function (data) {
 			$(data).each(function() {
 				$('#files')
-				.append('<button>info</button>')
-				.append(
-				$('<li>'+this.split('/')[this.split('/').length -1]+'<ul></ul></li>')
-				.data('file', this));
+					.append(
+						$('<li></li>')
+							.append('<button id="info" class="btn btn-default btn-xs icon-plus" data-toggle="button"></button>')
+							.append('<button id="run" class="btn btn-default btn-xs icon-play" data-toggle="button"></button>')						
+							.append('<span>'+this.split('/').pop()+'</span>')
+							.append('<ul></ul>')
+							.data('file', this)								
+					);
+
 			});
 		});
 
@@ -31,30 +38,39 @@
 			$("ul", $li).append('<li>'+data+'</li>');
 		});
 
-		$(document).on('click', '#files button', function(){
-			$li = $(this).next();
-			$('#spec').html('');
-			$('#info').html('');
-			socket.emit('info', $(this).next().data('file'));
-		})
+		socket.on('spec', function (data) {
+			$("ul", $li).append('<li>'+data+'</li>');
+		});	  
 
-		$(document).on('click', '#files li', function(){
-			$('#spec').html('');
-			$('#info').html('');
-			console.log('message');
-			socket.emit('run', $(this).data('file'));
+		$(document).on('click', 'button', function(){
+			$li = $(this).parent();
+
+			$(this).toggleClass('icon-minus icon-plus');
+
+			var state = $(this).data('state');
+			$('#spec').empty();
+			$('#info_div').empty();
+			$("ul", $li).empty();
+
+		    switch(state){
+		        case 1 :
+		        case undefined : socket.emit($(this).attr('id'), $($li).data('file')); $(this).data('state', 2); break;
+		        case 2 : $(this).data('state', 1); break;
+		    }
+			
 		})
 	  
-		socket.on('spec', function (data) {
-			console.log(data);
-			$('#spec').append(data+'<br>');
-		});	  
 
 	</script>    
 
+</head>
+<body>
+
+    <div id="mocha"></div>
+
 	<ul id='files'></ul>
 	<div id='spec'></div>
-	<div id='info'></div>
+	<div id='info_div'></div>
 
 </body>
 </html>
