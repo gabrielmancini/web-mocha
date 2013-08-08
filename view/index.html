@@ -11,9 +11,38 @@
 <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet">
 <!-- Latest compiled and minified CSS -->
 <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0-rc1/css/bootstrap.min.css" rel="stylesheet">
+
+<style type="text/css">
+	body, html {
+	    height: 100%;
+	    overflow: hidden;
+	}
+
+	.navbar-inner {
+	    height: 40px;
+	}
+
+	.scrollable {
+	    height: 800px;	    
+	    overflow-y: scroll;
+	}
+
+	.max-height {
+	    height: 100%;
+	}
+
+	.no-overflow {
+	    overflow: hidden;
+	}
+
+	.pad40-top {
+	    padding-top: 40px;
+	}
+	</style>
  
 <!-- Latest compiled and minified JavaScript -->
-<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0-rc1/js/bootstrap.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0-rc1/js/bootstrap.min.js">
+</script>
 
 	<script>
 		var $li = null;
@@ -96,18 +125,16 @@
 
 <div class="container">
     <div class="row">
-    	<div class="col-lg-4">
-			<ul id='files' class='list-group'></ul>
+    	<div class="col-lg-4 panel"><h4>Suite</h4>
+    		<div class=" scrollable">
+				<ul id='files' class='list-group'></ul>
+    		</div>
 		</div>
-		<div class="col-lg-4">
-			<div class='panel'>
-				<pre><code id='console_log' class="javascript"></code></pre>
-			</div>
+		<div class="col-lg-4 panel"><h4>Console</h4>
+			<pre><code id='console_log' class="javascript"></code></pre>
 		</div>
-		<div class="col-lg-4">
-			<div class='panel'>
-				<pre><code id='console_source' class="javascript"></code></pre>
-			</div>
+		<div class="col-lg-4 panel"><h4>Source</h4>
+			<pre><code id='console_source' class="javascript"></code></pre>
 		</div>
 	</div>
 </div>
