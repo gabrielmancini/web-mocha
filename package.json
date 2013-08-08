@@ -1,6 +1,6 @@
 {
   "name": "web-mocha",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "A mocha http server",
   "main": "./lib/web-mocha.js",
   "scripts": {
