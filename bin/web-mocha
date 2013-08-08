@@ -50,10 +50,10 @@ var server = new Server({
 });
 server.start(function (err) {
     if (err) {
-        console.error('\nThere was an error starting the Mocha server:'.red);
+        console.error('\nThere was an error starting the Web-Mocha:'.red);
         console.error(err.msg.red + '\n');
         process.exit(1);
     }
-    console.log('\nMocha server running:'.green);
+    console.log('\nWeb-Mocha server running:'.green);
     console.log('http://' + server.host + ':' + server.port + '/\n');
 });

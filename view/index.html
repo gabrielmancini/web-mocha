@@ -16,61 +16,101 @@
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0-rc1/js/bootstrap.min.js"></script>
 
 	<script>
-		var $li;
+		var $li = null;
 		var socket = io.connect('http://localhost');
 		socket.emit('getfiles');	  
-		socket.on('retrivefiles', function (data) {
-			$(data).each(function() {
-				$('#files')
-					.append(
-						$('<li></li>')
-							.append('<button id="info" class="btn btn-default btn-xs icon-plus" data-toggle="button"></button>')
-							.append('<button id="run" class="btn btn-default btn-xs icon-play" data-toggle="button"></button>')						
-							.append('<span>'+this.split('/').pop()+'</span>')
-							.append('<ul></ul>')
-							.data('file', this)								
-					);
+		socket.on('getfiles', function (file, currentDir) {
+			$li = $('<li class="list-group-item"></li>')
+					.data('file', file)
+					.append('<button id="plus" class="btn btn-default btn-xs icon-plus" data-toggle="button"></button>')
+					.append('<button id="source" class="btn btn-default btn-xs icon-code" data-toggle="button"></button>')
+					.append('<span>'+file.replace(currentDir, '')+'</span>')
+					.append('<ul class="list-group hide">Test</ul>')
+			$('#files')
+				.append($li);
 
-			});
 		});
 
-		socket.on('info', function (data) {
-			$("ul", $li).append('<li>'+data+'</li>');
+		socket.on('test', function (data) {
+			$("ul", $li)
+				.append(
+					$('<li class="list-group-item"></li>')
+						.data('fullName', data)
+						.append('<button id="run" class="btn btn-default btn-xs icon-play" data-toggle="button"></button>')
+						.append('<span>'+data+'</span>')
+						
+				);				
 		});
 
-		socket.on('spec', function (data) {
-			$("ul", $li).append('<li>'+data+'</li>');
-		});	  
+		socket.on('spec', function (data, info, klass) {
+			$("li").filter(function() { return $(this).data("fullName") == data; })
+				.removeClass('text-success text-danger')
+				.addClass('text-'+klass)
+			$('#console_log').html(info);
+		});
 
-		$(document).on('click', 'button', function(){
+		socket.on('source', function (data) {
+			$('#console_source').html(data);
+		});
+
+		$(document).on('click', '#run', function(){
+			var fullName = $(this).parent().data('fullName');
+
+			$("li").filter(function() { return $(this).data("fullName") == fullName; })
+				.removeClass('text-success text-danger')
+
+			socket.emit('run', fullName);
+		})
+
+		$(document).on('click', '#plus', function(){
 			$li = $(this).parent();
 
 			$(this).toggleClass('icon-minus icon-plus');
-
-			var state = $(this).data('state');
-			$('#spec').empty();
-			$('#info_div').empty();
-			$("ul", $li).empty();
-
-		    switch(state){
-		        case 1 :
-		        case undefined : socket.emit($(this).attr('id'), $($li).data('file')); $(this).data('state', 2); break;
-		        case 2 : $(this).data('state', 1); break;
-		    }
+			$("ul", $li).toggleClass('hide');
 			
 		})
-	  
+
+		$(document).on('click', '#source', function(){
+		
+			socket.emit('source', $(this).parent().data('file'));
+		})	  
 
 	</script>    
 
 </head>
-<body>
+<body data-twttr-rendered="true">
 
-    <div id="mocha"></div>
+<div class="navbar navbar-inverse navbar-top">
+	<div class="container">
+		<button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+		</button>
+		<a href="../" class="navbar-brand">Web-Mocha</a>
+		<div class="nav-collapse collapse bs-navbar-collapse">
 
-	<ul id='files'></ul>
-	<div id='spec'></div>
-	<div id='info_div'></div>
+		</div>
+	</div>
+</div>
+
+<div class="container">
+    <div class="row">
+    	<div class="col-lg-4">
+			<ul id='files' class='list-group'></ul>
+		</div>
+		<div class="col-lg-4">
+			<div class='panel'>
+				<pre><code id='console_log' class="javascript"></code></pre>
+			</div>
+		</div>
+		<div class="col-lg-4">
+			<div class='panel'>
+				<pre><code id='console_source' class="javascript"></code></pre>
+			</div>
+		</div>
+	</div>
+</div>
 
 </body>
 </html>

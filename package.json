@@ -1,6 +1,6 @@
 {
   "name": "web-mocha",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "A mocha http server",
   "main": "./lib/web-mocha.js",
   "scripts": {
@@ -32,8 +32,6 @@
   "author": "",
   "license": "BSD",
   "dependencies": {
-    "async": "~0.2",
-    "browserify": "~2.18",
     "colors": "~0.6",
     "commander": "~1.1",
     "glob": "~3.2",
