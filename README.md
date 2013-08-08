@@ -52,7 +52,7 @@ NODE_ENV=test NODE_PATH=lib web-mocha test
 License
 -------
 
-mocha-srv is licensed under the [MIT][mit] license.
+web-mocha is licensed under the [MIT][mit] license.
 
 
 
