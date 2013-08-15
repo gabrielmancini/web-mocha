@@ -1,15 +1,12 @@
 {
   "name": "web-mocha",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "A mocha http server",
   "main": "./lib/web-mocha.js",
   "scripts": {
     "test": "npm test"
   },
-  "author": {
-    "name": "Gabriel Mancini",
-    "email": "gabriel.mancini@gmail.com"
-  },
+  "author": "",
   "contributors": [
     {
       "name": "Gabriel Mancini",
@@ -26,12 +23,11 @@
   },
   "homepage": "https://github.com/gabrielmancini/web-mocha",
   "bugs": "https://github.com/gabrielmancini/web-mocha/issues",
-    "keywords": [
+  "keywords": [
     "mocha",
     "web",
     "server"
   ],
-  "author": "",
   "license": "BSD",
   "dependencies": {
     "colors": "~0.6",
@@ -40,7 +36,8 @@
     "mocha": "~1.12.0",
     "express": "~3.3.4",
     "socket.io": "~0.9.16",
-    "underscore": "~1.5.1"
+    "underscore": "~1.5.1",
+    "harmonize": "~1.33.7"
   },
   "bin": {
     "web-mocha": "./bin/web-mocha"

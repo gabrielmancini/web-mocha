@@ -2,6 +2,7 @@
 'use strict';
 
 // Dependencies
+require('harmonize')();
 require('colors');
 var pkg = require('../package.json');
 var program = require('commander');
