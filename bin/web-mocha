@@ -1,60 +1,51 @@
 #!/usr/bin/env node
-'use strict';
 
-// Dependencies
-require('harmonize')();
-require('colors');
-var pkg = require('../package.json');
-var program = require('commander');
-var Server = require('../lib/web-mocha').Server;
+/**
+ * This tiny wrapper file checks for known node flags and appends them
+ * when found, before invoking the "real" _web-mocha(1) executable.
+ */
 
-// Initialise program
-program
-    .version(pkg.version)
-    .option(
-        '-p, --port <port>',
-        'specify the port to run the server on. Default: 3000',
-        '3000'
-    )
-    .option(
-        '-t, --title <title>',
-        'specify the test suite title'
-    )
-    .option(
-        '-u, --ui <ui>',
-        'specify the Mocha UI your tests use, one of: bdd (default), tdd',
-        'bdd'
-    )
-    .usage('[options] <path>');
+var spawn = require('child_process').spawn
+  , args = [ __dirname + '/_web-mocha' ];
 
-// Parse arguments
-program.parse(process.argv);
+process.argv.slice(2).forEach(function(arg){
+  var flag = arg.split('=')[0];
 
-// Get the path
-var testPath = program.args[0];
-if (!testPath || program.args[1]) {
-    program.help();
-}
-
-// Get/sanitize the port
-var port = parseInt(program.port, 10);
-if (isNaN(port) || port === Infinity) {
-    program.help();
-}
-
-// Spin up a test server
-var server = new Server({
-    title: program.title,
-    path: testPath,
-    ui: program.ui,
-    port: port
+  switch (flag) {
+    case '-d':
+      args.unshift('--debug');
+      break;
+    case 'debug':
+    case '--debug':
+    case '--debug-brk':
+      args.unshift(arg);
+      break;
+    case '-gc':
+    case '--expose-gc':
+      args.unshift('--expose-gc');
+      break;
+    case '--gc-global':
+    case '--harmony':
+    case '--harmony-proxies':
+    case '--harmony-collections':
+    case '--harmony-generators':
+    case '--prof':
+      args.unshift(arg);
+      break;
+    default:
+      if (0 == arg.indexOf('--trace')) args.unshift(arg);
+      else args.push(arg);
+      break;
+  }
 });
-server.start(function (err) {
-    if (err) {
-        console.error('\nThere was an error starting the Web-Mocha:'.red);
-        console.error(err.msg.red + '\n');
-        process.exit(1);
+
+var proc = spawn(process.argv[0], args, { customFds: [0,1,2] });
+proc.on('exit', function (code, signal) {
+  process.on('exit', function(){
+    if (signal) {
+      process.kill(process.pid, signal);
+    } else {
+      process.exit(code);
     }
-    console.log('\nWeb-Mocha server running:'.green);
-    console.log('http://' + server.host + ':' + server.port + '/\n');
+  });
 });

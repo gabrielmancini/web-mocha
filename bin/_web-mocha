@@ -1,0 +1,59 @@
+#!/usr/bin/env node
+'use strict';
+
+// Dependencies
+require('colors');
+var pkg = require('../package.json');
+var program = require('commander');
+var Server = require('../lib/web-mocha').Server;
+
+// Initialise program
+program
+    .version(pkg.version)
+    .option(
+        '-p, --port <port>',
+        'specify the port to run the server on. Default: 3000',
+        '3000'
+    )
+    .option(
+        '-t, --title <title>',
+        'specify the test suite title'
+    )
+    .option(
+        '-u, --ui <ui>',
+        'specify the Mocha UI your tests use, one of: bdd (default), tdd',
+        'bdd'
+    )
+    .usage('[options] <path>');
+
+// Parse arguments
+program.parse(process.argv);
+
+// Get the path
+var testPath = program.args[0];
+if (!testPath || program.args[1]) {
+    program.help();
+}
+
+// Get/sanitize the port
+var port = parseInt(program.port, 10);
+if (isNaN(port) || port === Infinity) {
+    program.help();
+}
+
+// Spin up a test server
+var server = new Server({
+    title: program.title,
+    path: testPath,
+    ui: program.ui,
+    port: port
+});
+server.start(function (err) {
+    if (err) {
+        console.error('\nThere was an error starting the Web-Mocha:'.red);
+        console.error(err.msg.red + '\n');
+        process.exit(1);
+    }
+    console.log('\nWeb-Mocha server running:'.green);
+    console.log('http://' + server.host + ':' + server.port + '/\n');
+});
