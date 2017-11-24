@@ -1,6 +1,8 @@
 web-mocha
 =========
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/gabrielmancini/web-mocha.svg)](https://greenkeeper.io/)
+
 web-mocha runs a simple HTTP server, serving up your [Mocha][mocha] tests. This allows you to run the same suite of tests on the command line (with Node.js) and in the browser.
 
 
