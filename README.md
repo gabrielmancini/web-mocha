@@ -57,5 +57,5 @@ web-mocha is licensed under the [MIT][mit] license.
 
 
 [mit]: http://opensource.org/licenses/mit-license.php
-[mocha]: http://visionmedia.github.com/mocha/
+[mocha]: http://mochajs.org/
 [node]: http://nodejs.org/
